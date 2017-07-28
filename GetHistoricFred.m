@@ -1,7 +1,13 @@
 function [ data ] = GetHistoricFred(symbol,startDate,endDate)
-%   Forked by Julio Lima (Universidade Federal do Ceará)
+%   Forked by Julio Lima (Universidade Federal do CearÃ¡)
 %   Query date ranges from Fre finance.
 %   Sample usage: GetHistoricFred('M1','04/27/2010','04/27/2017')
+%   Symbols to use: 
+%   |-> M1 Money Stock: M1
+%   |-> M1 Money Multiplier: MULT
+%   |-> S&P 500: SP500
+%   |-> Effective Federal Funds Rate: FEDFUNDS
+%   |-> Real Personal Consumption Expenditures: PCEC96
 
     %Define a format of query.
     format = 'yyyy-mm-dd';
@@ -17,10 +23,6 @@ function [ data ] = GetHistoricFred(symbol,startDate,endDate)
     %Define how much attributes will be used.
     n_attb = 3;
     
-    names = cell(10,1);
-    for i=1:10
-        attributes{i} = ['Sample Text ' num2str(i)];
-    end    
     attributes(1) = cellstr(strcat('&id=',symbol));
     attributes(2) = cellstr(strcat('&cosd=',startDateStr));
     attributes(3) = cellstr(strcat('&coed=',endDateStr));
@@ -33,12 +35,15 @@ function [ data ] = GetHistoricFred(symbol,startDate,endDate)
         root = strcat(root,attributes(i_cat));
     end
     
-    url = root;
+    url = char(root);
+    
+    %%Display address URL.
+    disp(url)
     
     %Receive the file;
-    response = urlread(char(url));
+    response = urlread(url);
     
     %Scan and convert the file to cells and return.
-    data = textscan(response,'%s %f %f %f %f %f','delimiter',',','HeaderLines',1);  
+    data = textscan(response,'%s %f','delimiter',',','HeaderLines',1);  
     
 end
