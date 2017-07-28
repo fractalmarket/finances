@@ -43,7 +43,7 @@ function [ data ] = GetHistoricFred(symbol,startDate,endDate)
     %Receive the file;
     response = urlread(url);
     
-    %Scan and convert the file to cells and return.
+    %Scan and convert the file to cells and return. peido
     data = textscan(response,'%s %f','delimiter',',','HeaderLines',1);  
     
 end
