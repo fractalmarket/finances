@@ -43,7 +43,7 @@ function [ data ] = GetHistoricGoogle( symbol,startDate,endDate )
     %Change datetime format to numbers and override the unreadble parameters.
     try
         i = 1;
-        while i<n_row
+        while i<=n_row
             %Change.
             data{i,1} = datenum(data{i,1});
             %Override.
@@ -55,5 +55,4 @@ function [ data ] = GetHistoricGoogle( symbol,startDate,endDate )
         end
     catch       
     end
-    
 end
