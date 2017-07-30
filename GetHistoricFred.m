@@ -56,19 +56,5 @@ function [ data ] = GetHistoricFred(symbol,startDate,endDate)
     data(:,1) = data_in{1,1};
     data(:,2) = data_in{1,2};
     
-    %Change datetime format to numbers and override the unreadble parameters.
-    try
-        i = 1;
-        while i<=n_row
-            %Change.
-            data{i,1} = datenum(data{i,1});
-            %Override.
-            if(strcmp(data(i,2),'.') || strcmp(data(i,2),'-'))
-                data(i,:) = [];
-                i = i - 1;
-            end
-            i = i + 1;
-        end
-    catch       
-    end
+    
 end

@@ -4,7 +4,6 @@ function [ data ] = GetHistoricBrasil(symbol)
 %   Query date ranges from Fred finance.
 %   Sample usage: GetHistoricBrasil('11','04/27/2010','04/27/2017')
 %   Código SGS to use:
-%   |-> Selic Percetual Annual: 11
 %   |-> Selic Percetual Monthly: 4390
 %   |-> Selic Percetual Daily: 1178
 
@@ -13,7 +12,8 @@ function [ data ] = GetHistoricBrasil(symbol)
     
     %Split symbol.
     symbol = strsplit(symbol,'SGS');
-
+    symbol = symbol(1,2);
+    
     %Define root of query.
     %Root the url address to download in csv format.
     root = strcat('http://api.bcb.gov.br/dados/serie/bcdata.sgs.',symbol,'/dados?formato=csv');
@@ -21,10 +21,14 @@ function [ data ] = GetHistoricBrasil(symbol)
     url = char(root);
 
     %Display address URL.
-    %disp(url)
+    disp(url)
     
     %Receive the file.
     response = urlread(url);
+    response = strrep(response,'"','''');
+    response = strrep(response,',','.');
+    response = strrep(response,';',',');
+    
     
     %Scan and convert the file to cells and return.
     data_in = textscan(response,'%s %s','delimiter',',','HeaderLines',1);    
@@ -51,4 +55,5 @@ function [ data ] = GetHistoricBrasil(symbol)
         end
     catch       
     end
+    
 end
