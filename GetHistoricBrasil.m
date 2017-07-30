@@ -1,44 +1,40 @@
-function [ data ] = GetHistoricGoogle( symbol,startDate,endDate )
+function [ data ] = GetHistoricBrasil(symbol)
 %   Produced by Chris Reeves (A2X Capital LLC)
 %   Forked by Julio Lima (Universidade Federal do Ceará)
-%   Query date ranges from Google finance.
-%   Sample usage GetHistoricGoogle('AAPL','04/27/2010','04/27/2017')
-%   Order: 1-Date, 2-Open, 3-High, 4-Low, 5-Close, 6-Volume
-
-    % Checking for optional Variables
-    if ~exist('Order', 'var')
-        order = 2;
-    end
+%   Query date ranges from Fred finance.
+%   Sample usage: GetHistoricBrasil('11','04/27/2010','04/27/2017')
+%   Código SGS to use:
+%   |-> Selic Percetual Annual: 11
+%   |-> Selic Percetual Monthly: 4390
+%   |-> Selic Percetual Daily: 1178
 
     %Define a format of query.
     %formatIn = 'dd-mmm-yyyy' or 'mm/dd/yyyy' or 'mm-dd-yyyy'
-    formatUrl = 'yyyy-mm-dd';
-
     
-    %First transform to the number format, it's a generic one.
-    startDateNum = datenum(startDate);
-    endDateNum = datenum(endDate);
+    %Split symbol.
+    symbol = strsplit(symbol,'SGS');
 
-    %First transform to the number format, it's a generic one.
-    startDateStr = datestr(startDateNum,formatUrl);
-    endDateStr = datestr(endDateNum,formatUrl);
+    %Define root of query.
+    %Root the url address to download in csv format.
+    root = strcat('http://api.bcb.gov.br/dados/serie/bcdata.sgs.',symbol,'/dados?formato=csv');
 
-    url = strcat('http://www.google.com/finance/historical?q=',symbol,'&startdate=',startDateStr,'&enddate=',endDateStr,'&output=csv');
-    url = strrep(url,' ','%20');
-    
+    url = char(root);
+
     %Display address URL.
     %disp(url)
     
-    %Receive the file and fix.
+    %Receive the file.
     response = urlread(url);
-    data_in = textscan(response,'%s %s %s %s %s %s','delimiter',',','HeaderLines',1);
+    
+    %Scan and convert the file to cells and return.
+    data_in = textscan(response,'%s %s','delimiter',',','HeaderLines',1);    
     
     %Filter data out by order.
-    n_row = size(data_in{1,1});
-    n_row = n_row(1,1);
-    data = cell(n_row(1,1),2);
+    size_max = size(data_in{1,1});
+    n_row = size_max(1,1);
+    data = cell(n_row,2);
     data(:,1) = data_in{1,1};
-    data(:,2) = data_in{1,order};
+    data(:,2) = data_in{1,2};
     
     %Change datetime format to numbers and override the unreadble parameters.
     try

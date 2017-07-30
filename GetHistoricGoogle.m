@@ -31,7 +31,7 @@ function [ data ] = GetHistoricGoogle( symbol,startDate,endDate )
     
     %Receive the file and fix.
     response = urlread(url);
-    data_in = textscan(response,'%s %s %s %s %s %s','delimiter',',','HeaderLines',1);
+    data_in = textscan(response,'%s %s','delimiter',';','HeaderLines',1);
     
     %Filter data out by order.
     n_row = size(data_in{1,1});
