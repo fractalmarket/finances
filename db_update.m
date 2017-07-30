@@ -20,10 +20,18 @@ function db_update()
     spf_update('SPY','12/01/2005');  
     
     %Banco do Brasil
-    spf_update('PETR4','12/01/2005');
+    spf_update('BBAS3','06/13/2003');
     
     %Petrobras
-    spf_update('BBAS3','12/01/2005'); 
+    spf_update('PETR4','06/13/2003'); 
     
+    %Ibovespa
+    spf_update('IBOV','06/13/2003'); 
+    
+    %Itau
+    spf_update('ITUB4','06/13/2003'); 
+    
+    
+    %Informative.
     disp('DONE!');
 end
