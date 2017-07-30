@@ -11,9 +11,12 @@ function oneUpdate(symbol,startDate, endDate)
     
     %Define how much Extern Databases will be used.
     %List: 1-Fred , 2-Google, 3-Brasil
-    nExternDatabase = 2;      
+    nExternDatabase = 3;      
    
+    %Define to global the data variable.
     global data;
+    
+    %Try database match.
     try
          %Find the Extern Database that match;    
         for i = 1:nExternDatabase
