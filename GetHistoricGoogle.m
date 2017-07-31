@@ -6,14 +6,19 @@ function [ data ] = GetHistoricGoogle( symbol,startDate,endDate,order, show)
 %   Order: 1-Date, 2-Open, 3-High, 4-Low, 5-Close, 6-Volume
 
     % Checking for optional variables.
-    % Order of query.
-    if ~exist('order', 'var')
-        order = 5;
-    end
-    
     % Display the urls.
     if ~exist('show', 'var')
         show = false;
+    end
+    
+    % Order of query.
+    if ~exist('order', 'var')
+        order = 5;
+    else      
+        if (order == true || order == false)
+            show = order;
+            order = 5;
+        end
     end
 
     %Define a format of query.
@@ -39,7 +44,7 @@ function [ data ] = GetHistoricGoogle( symbol,startDate,endDate,order, show)
     
     %Receive the file and fix.
     response = urlread(url);
-    data_in = textscan(response,'%s %s','delimiter',';','HeaderLines',1);
+    data_in = textscan(response,'%s %s %s %s %s %s','delimiter',',','HeaderLines',1);
     
     %Filter data out by order.
     n_row = size(data_in{1,1});

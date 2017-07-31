@@ -15,32 +15,30 @@ function oneUpdate(symbol,startDate, endDate,show)
         end
     end
     
-    if nargin < 1
-      b = 20;
-    end
-    
     %Define root of db;
     root = strcat('database/',symbol,'.csv');
-      
-    %define to global the data variable;
-    global data;
     
     %Find the Extern Database that match;
     try
         try
             data = GetHistoricFred(symbol,startDate,endDate, show);
         catch Exp1
-            try
-                if(strcmp(Exp1.identifier,'MATLAB:urlread:ConnectionFailed'))
-                    data = GetHistoricGoogle(symbol,startDate,endDate, show);
-                end
-            catch Exp2
+            if(strcmp(Exp1.identifier,'MATLAB:urlread:ConnectionFailed'))
                 try
+                    data = GetHistoricGoogle(symbol,startDate,endDate, show);
+                catch Exp2
                     if(strcmp(Exp2.identifier,'MATLAB:urlread:ConnectionFailed'))
-                        data = GetHistoricBrasil(symbol,startDate,endDate, show);
+                        try
+                            data = GetHistoricBrasil(symbol,startDate,endDate, show);
+                        catch Exp3
+                            disp(Exp3);
+                        end
+                    else
+                        disp(Exp2);
                     end
-                catch 
                 end
+            else
+                disp(Exp1);
             end
         end
         
@@ -64,4 +62,3 @@ function oneUpdate(symbol,startDate, endDate,show)
         disp(MExc)
     end
 end
-

@@ -1,6 +1,11 @@
 function dbUpdate(show)
 %	Update all parameters in database from Google or Fred and Brasil.
     
+    % Checking for optional endDate.
+    if ~exist('show', 'var')
+        show = false;
+    end
+    
     %M1 Money Stock - EUA
     oneUpdate('M1','01/06/1975', show);
     
