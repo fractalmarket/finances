@@ -1,15 +1,22 @@
 function oneUpdate(symbol,startDate, endDate,show)
-%   Update some parameter from Google or Fred.   
-
-    % Checking for optional variables.
-    % Display the urls.
+%   Update some parameter from Google or Fred.  
+    
+    % Checking for optional endDate.
     if ~exist('show', 'var')
         show = false;
     end
-
-    % Checking for optional endDate.
-    if ~exist('Order', 'var')
+    
+    if ~exist('endDate', 'var')
         endDate = today('datetime');
+    else      
+        if (endDate == true || endDate == false)
+            show = endDate;
+            endDate = today('datetime');
+        end
+    end
+    
+    if nargin < 1
+      b = 20;
     end
     
     %Define root of db;

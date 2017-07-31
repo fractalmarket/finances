@@ -33,7 +33,7 @@ function [ data ] = GetHistoricGoogle( symbol,startDate,endDate,order, show)
     url = strrep(url,' ','%20');
     
     %Display address URL.
-    if(~show)
+    if(show)
         disp(url)
     end
     

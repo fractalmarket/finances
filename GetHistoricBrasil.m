@@ -27,7 +27,7 @@ function [ data ] = GetHistoricBrasil(symbol, show)
     url = char(root);
 
     %Display address URL.
-    if(~show)
+    if(show)
         disp(url)
     end
     
