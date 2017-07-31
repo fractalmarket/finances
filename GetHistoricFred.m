@@ -1,4 +1,4 @@
-function [ data ] = GetHistoricFred(symbol,startDate,endDate)
+function [ data ] = GetHistoricFred(symbol,startDate,endDate, show)
 %   Produced by Chris Reeves (A2X Capital LLC)
 %   Forked by Julio Lima (Universidade Federal do Ceará)
 %   Query date ranges from Fred finance.
@@ -9,6 +9,12 @@ function [ data ] = GetHistoricFred(symbol,startDate,endDate)
 %   |-> S&P 500: SP500
 %   |-> Effective Federal Funds Rate: FEDFUNDS
 %   |-> Real Personal Consumption Expenditures: PCEC96
+
+    % Checking for optional variables.
+    % Display the urls.
+    if ~exist('show', 'var')
+        show = false;
+    end
 
     %Define a format of query.
     %formatIn = 'dd-mmm-yyyy' or 'mm/dd/yyyy' or 'mm-dd-yyyy'
@@ -41,7 +47,9 @@ function [ data ] = GetHistoricFred(symbol,startDate,endDate)
     url = char(root);
     
     %Display address URL.
-    %disp(url)
+    if(~show)
+        disp(url)
+    end
     
     %Receive the file.
     response = urlread(url);

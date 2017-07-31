@@ -1,5 +1,11 @@
-function oneUpdate(symbol,startDate, endDate)
+function oneUpdate(symbol,startDate, endDate,show)
 %   Update some parameter from Google or Fred.   
+
+    % Checking for optional variables.
+    % Display the urls.
+    if ~exist('show', 'var')
+        show = false;
+    end
 
     % Checking for optional endDate.
     if ~exist('Order', 'var')
@@ -8,29 +14,29 @@ function oneUpdate(symbol,startDate, endDate)
     
     %Define root of db;
     root = strcat('database/',symbol,'.csv');
-    
-    %Define how much Extern Databases will be used.
-    %List: 1-Fred , 2-Google, 3-Brasil
-    nExternDatabase = 3;      
-   
+      
     %define to global the data variable;
     global data;
+    
+    %Find the Extern Database that match;
     try
-         %Find the Extern Database that match;    
-        for i = 1:nExternDatabase
+        try
+            data = GetHistoricFred(symbol,startDate,endDate, show);
+        catch Exp1
             try
-                switch i
-                    case 1
-                        data = GetHistoricFred(symbol,startDate,endDate);
-                    case 2
-                        data = GetHistoricGoogle(symbol,startDate,endDate);
-                    case 3
-                        data = GetHistoricBrasil(symbol);
+                if(strcmp(Exp1.identifier,'MATLAB:urlread:ConnectionFailed'))
+                    data = GetHistoricGoogle(symbol,startDate,endDate, show);
                 end
-            catch
+            catch Exp2
+                try
+                    if(strcmp(Exp2.identifier,'MATLAB:urlread:ConnectionFailed'))
+                        data = GetHistoricBrasil(symbol,startDate,endDate, show);
+                    end
+                catch 
+                end
             end
-       end
-       
+        end
+        
        if (exist(root, 'file') == 2)
            n_row =  size(data);
            n_row_csv =  size(csvread(root));

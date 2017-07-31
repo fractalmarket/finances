@@ -1,13 +1,19 @@
-function [ data ] = GetHistoricGoogle( symbol,startDate,endDate )
+function [ data ] = GetHistoricGoogle( symbol,startDate,endDate,order, show)
 %   Produced by Chris Reeves (A2X Capital LLC)
 %   Forked by Julio Lima (Universidade Federal do Ceará)
 %   Query date ranges from Google finance.
 %   Sample usage GetHistoricGoogle('AAPL','04/27/2010','04/27/2017')
 %   Order: 1-Date, 2-Open, 3-High, 4-Low, 5-Close, 6-Volume
 
-    % Checking for optional Variables
-    if ~exist('Order', 'var')
-        order = 2;
+    % Checking for optional variables.
+    % Order of query.
+    if ~exist('order', 'var')
+        order = 5;
+    end
+    
+    % Display the urls.
+    if ~exist('show', 'var')
+        show = false;
     end
 
     %Define a format of query.
@@ -27,7 +33,9 @@ function [ data ] = GetHistoricGoogle( symbol,startDate,endDate )
     url = strrep(url,' ','%20');
     
     %Display address URL.
-    %disp(url)
+    if(~show)
+        disp(url)
+    end
     
     %Receive the file and fix.
     response = urlread(url);

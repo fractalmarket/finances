@@ -1,4 +1,4 @@
-function [ data ] = GetHistoricBrasil(symbol)
+function [ data ] = GetHistoricBrasil(symbol, show)
 %   Produced by Chris Reeves (A2X Capital LLC)
 %   Forked by Julio Lima (Universidade Federal do Ceará)
 %   Query date ranges from Fred finance.
@@ -6,6 +6,12 @@ function [ data ] = GetHistoricBrasil(symbol)
 %   Código SGS to use:
 %   |-> Selic Percetual Monthly: 4390
 %   |-> Selic Percetual Daily: 1178
+
+    % Checking for optional variables.
+    % Display the urls.
+    if ~exist('show', 'var')
+        show = false;
+    end
 
     %Define a format of query.
     %formatIn = 'dd-mmm-yyyy' or 'mm/dd/yyyy' or 'mm-dd-yyyy'
@@ -21,24 +27,30 @@ function [ data ] = GetHistoricBrasil(symbol)
     url = char(root);
 
     %Display address URL.
-    disp(url)
+    if(~show)
+        disp(url)
+    end
     
     %Receive the file.
     response = urlread(url);
     response = strrep(response,'"','''');
     response = strrep(response,',','.');
     response = strrep(response,';',',');
+    response = strrep(response,'/','//,//');
     
     
     %Scan and convert the file to cells and return.
-    data_in = textscan(response,'%s %s','delimiter',',','HeaderLines',1);    
+    data_in = textscan(response,'%s %s %s %s','delimiter',',','HeaderLines',1);    
     
     %Filter data out by order.
     size_max = size(data_in{1,1});
     n_row = size_max(1,1);
     data = cell(n_row,2);
-    data(:,1) = data_in{1,1};
-    data(:,2) = data_in{1,2};
+    data(:,1) = strcat(data_in{1,2},data_in{1,1},data_in{1,3});
+    data(:,1) = strrep(data(:,1),'//''','-');
+    data(:,1) = strrep(data(:,1),'////','-');
+    data(:,1) = strrep(data(:,1),'//','''');
+    data(:,2) = data_in{1,4};
     
     %Change datetime format to numbers and override the unreadble parameters.
     try
@@ -55,5 +67,4 @@ function [ data ] = GetHistoricBrasil(symbol)
         end
     catch       
     end
-    
 end
