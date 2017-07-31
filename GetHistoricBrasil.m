@@ -4,8 +4,10 @@ function [ data ] = GetHistoricBrasil(symbol, show)
 %   Query date ranges from Fred finance.
 %   Sample usage: GetHistoricBrasil('11','04/27/2010','04/27/2017')
 %   Código SGS to use:
+%   |-> Selic Annualyzed Percetual Monthly: 4189
+%   |-> Selic Annualyzed Percetual Daily: 1178
 %   |-> Selic Percetual Monthly: 4390
-%   |-> Selic Percetual Daily: 1178
+%   |-> Selic Percetual Daily: 11
 
     % Checking for optional variables.
     % Display the urls.
@@ -33,10 +35,10 @@ function [ data ] = GetHistoricBrasil(symbol, show)
     
     %Receive the file.
     response = urlread(url);
-    response = strrep(response,'"','''');
+    response = strrep(response,'"','');
     response = strrep(response,',','.');
     response = strrep(response,';',',');
-    response = strrep(response,'/','//,//');
+    response = strrep(response,'/',',');
     
     
     %Scan and convert the file to cells and return.
@@ -46,10 +48,7 @@ function [ data ] = GetHistoricBrasil(symbol, show)
     size_max = size(data_in{1,1});
     n_row = size_max(1,1);
     data = cell(n_row,2);
-    data(:,1) = strcat(data_in{1,2},data_in{1,1},data_in{1,3});
-    data(:,1) = strrep(data(:,1),'//''','-');
-    data(:,1) = strrep(data(:,1),'////','-');
-    data(:,1) = strrep(data(:,1),'//','''');
+    data(:,1) = strcat(data_in{1,2},'-',data_in{1,1},'-',data_in{1,3});
     data(:,2) = data_in{1,4};
     
     %Change datetime format to numbers and override the unreadble parameters.

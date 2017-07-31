@@ -20,6 +20,18 @@ function dbUpdate(show)
 
     %Real Personal Consumption Expenditures
     oneUpdate('PCEC96','01/01/1999', show);
+       
+    %Selic Annualyzed Percetual Monthly: 4189
+    oneUpdate('SGS4189',show);
+    
+    %Selic Annualyzed Percetual Daily: 1178
+    oneUpdate('SGS1178',show);
+    
+    %Selic Percetual Monthly: 4390
+    oneUpdate('SGS4390',show);
+    
+    %Selic Percetual Daily: 11
+    oneUpdate('SGS11',show);
     
     %SPY
     oneUpdate('SPY','12/01/2005', show);  

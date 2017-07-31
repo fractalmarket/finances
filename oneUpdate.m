@@ -4,15 +4,17 @@ function oneUpdate(symbol,startDate, endDate,show)
     % Checking for optional endDate.
     if ~exist('show', 'var')
         show = false;
-    end
-    
-    if ~exist('endDate', 'var')
-        endDate = today('datetime');
-    else      
-        if (endDate == true || endDate == false)
+        if (exist('startDate', 'var') && islogical(startDate))
+            show = startDate;
+        end
+        if (exist('endDate', 'var') && islogical(endDate))
             show = endDate;
             endDate = today('datetime');
         end
+    end
+    
+    if ~exist('endDate', 'var')
+        endDate = today('datetime'); 
     end
     
     %Define root of db;
@@ -20,27 +22,27 @@ function oneUpdate(symbol,startDate, endDate,show)
     
     %Find the Extern Database that match;
     try
-        try
-            data = GetHistoricFred(symbol,startDate,endDate, show);
-        catch Exp1
-            if(strcmp(Exp1.identifier,'MATLAB:urlread:ConnectionFailed'))
-                try
-                    data = GetHistoricGoogle(symbol,startDate,endDate, show);
-                catch Exp2
-                    if(strcmp(Exp2.identifier,'MATLAB:urlread:ConnectionFailed'))
-                        try
-                            data = GetHistoricBrasil(symbol,startDate,endDate, show);
-                        catch Exp3
-                            disp(Exp3);
-                        end
-                    else
-                        disp(Exp2);
-                    end
-                end
-            else
-                disp(Exp1);
-            end
-        end
+       if(~exist('startDate', 'var') || exist('startDate', 'var') && ~islogical(startDate))
+           try
+               data = GetHistoricFred(symbol,startDate,endDate, show);
+           catch Exp1
+               if(strcmp(Exp1.identifier,'MATLAB:urlread:ConnectionFailed'))
+                   try
+                       data = GetHistoricGoogle(symbol,startDate,endDate, show);
+                   catch Exp2
+                       disp(Exp2);
+                   end
+               else
+                   disp(Exp1);
+               end
+           end
+       else
+           try
+               data = GetHistoricBrasil(symbol,show);
+           catch Exp3
+               disp(Exp3);
+           end
+       end
         
        if (exist(root, 'file') == 2)
            n_row =  size(data);
